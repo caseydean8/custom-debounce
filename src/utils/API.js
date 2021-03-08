@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Export an object containing methods we'll use for accessing the Wikipedia API
 
-export default {
+const API = {
   searchTerms: function(query) {
     return axios.get(
       "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
@@ -11,3 +11,5 @@ export default {
     );
   }
 };
+
+export default API;

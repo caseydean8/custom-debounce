@@ -6,7 +6,7 @@ function SearchResults() {
   const article = useContext(ArticleContext);
 
   return (
-    <ul className="list-group search-results">
+    <ul style={{ marginTop: "30px" }} className="list-group search-results">
       <li className="list-group-item">
         <h2>{article.title}</h2>
         <p>{article.description}</p>
