@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import { DebounceInput } from "react-debounce-input";
+// import { DebounceInput } from "react-debounce-input";
 
 // Using the datalist element we can create autofill suggestions based on the props.breeds array
 function SearchForm(props) {
@@ -9,9 +9,9 @@ function SearchForm(props) {
       <div className="form-group">
         <label htmlFor="language">Search Term:</label>
         {/* below replaces input tag  */}
-        <DebounceInput
-          minLength={2}
-          debounceTimeout={3000}
+        <input
+          // minLength={2} from DebounceInput
+          // debounceTimeout={3000} from DebounceInput
           value={props.search}
           onChange={props.handleInputChange}
           name="term"

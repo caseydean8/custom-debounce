@@ -5,10 +5,12 @@ import SearchResults from "../../components/SearchResults";
 import Alert from "../../components/Alert";
 import ArticleContext from "../../utils/ArticleContext";
 import API from "../../utils/API";
+import { useDebounce } from 'use-debounce';
+
 // import UseDebounce from "../../utils/Debounce";
 // import { DebounceInput } from "react-debounce-input";
 // above moved to searchForm component...
-// sudo yarn start made browser detect changes!!!
+// sudo yarn start made browser detect changes...
 
 function Search() {
   const [articleState, setArticleState] = useState({
@@ -20,6 +22,8 @@ function Search() {
   const [search, setSearch] = useState("Wikipedia");
   const [error, setError] = useState("");
   console.log(search);
+  const [bounceSearch] = useDebounce(search, 1000);
+
   // const bounceSearch = UseDebounce(search, 2000);
   // console.log(`bounceSearch = '${bounceSearch}'`);
 
@@ -30,11 +34,11 @@ function Search() {
     //  * Update the `Search` page so that the useEffect Hook is listening for the value returned from the `useDebounce` Hook. Pass in a `delay` value of 500.
 
     //* The finished application should only search for a new article if there has been a period of 500 milliseconds without any user input.
-    if (!search) {
+    if (!bounceSearch) {
       return;
     }
 
-    API.searchTerms(search)
+    API.searchTerms(bounceSearch)
       // useDebounce(search)
       .then((res) => {
         if (res.data.length === 0) {
@@ -50,7 +54,7 @@ function Search() {
         });
       })
       .catch((err) => setError(err));
-  }, [search]);
+  }, [bounceSearch]);
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
