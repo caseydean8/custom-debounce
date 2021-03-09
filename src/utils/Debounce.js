@@ -1,17 +1,15 @@
-// import { useState } from 'react';
-// import API from "../utils/API";
 
-const UseDebounce = (value, delay) => {
-  // console.log('debouncing it!!!');
-  // let stall = "";
-  console.log(`value: ${value}, delay: ${delay}`);
-  setTimeout(()=> {
-    console.log(`value in timeout: ${value}`);
-    // stall = value;
-    console.log("test again");
-    return value
-  }, delay);
-  // return stall;
+const UseDebounce = (fn, delay) => {
+  let timer = null;
+  return function () {
+    const context = this,
+      // beware, arrow functions can't use "arguments"
+      args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
 };
 
 export default UseDebounce;

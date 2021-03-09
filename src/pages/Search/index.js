@@ -5,9 +5,9 @@ import SearchResults from "../../components/SearchResults";
 import Alert from "../../components/Alert";
 import ArticleContext from "../../utils/ArticleContext";
 import API from "../../utils/API";
-import { useDebounce } from 'use-debounce';
+// import { useDebounce } from 'use-debounce';
 
-// import UseDebounce from "../../utils/Debounce";
+import UseDebounce from "../../utils/Debounce";
 // import { DebounceInput } from "react-debounce-input";
 // above moved to searchForm component...
 // sudo yarn start made browser detect changes...
@@ -21,25 +21,18 @@ function Search() {
 
   const [search, setSearch] = useState("Wikipedia");
   const [error, setError] = useState("");
-  console.log(search);
-  const [bounceSearch] = useDebounce(search, 1000);
-
-  // const bounceSearch = UseDebounce(search, 2000);
-  // console.log(`bounceSearch = '${bounceSearch}'`);
 
   // When the component mounts, update the title to be Wikipedia Searcher
   useEffect(() => {
     document.title = "Wikipedia Searcher";
-    // console.log(`bounceSearch in useEffect ${bounceSearch}`);
     //  * Update the `Search` page so that the useEffect Hook is listening for the value returned from the `useDebounce` Hook. Pass in a `delay` value of 500.
 
     //* The finished application should only search for a new article if there has been a period of 500 milliseconds without any user input.
-    if (!bounceSearch) {
+    if (!search) {
       return;
     }
 
-    API.searchTerms(bounceSearch)
-      // useDebounce(search)
+    API.searchTerms(search)
       .then((res) => {
         if (res.data.length === 0) {
           throw new Error("No results found.");
@@ -54,25 +47,15 @@ function Search() {
         });
       })
       .catch((err) => setError(err));
-  }, [bounceSearch]);
+  }, [search]);
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
-    // const wait = UseDebounce(event.target.value, 500);
-    // console.log(wait);
-    // setSearch(wait);
-    // setSearch(UseDebounce(event.target.value, 3000));
-    // UseDebounce(setSearch(event.target.value), 3000);
-    // const wait = UseDebounce(event.target.value, 2000);
-    // console.log(wait);
-    // setSearch(wait);
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
   };
-
-  // useDebounce(handleInputChange, 500);
 
   return (
     <ArticleContext.Provider value={articleState}>
@@ -86,14 +69,10 @@ function Search() {
             {error}
           </Alert>
           <SearchForm
-            // {/* <DebounceInput */}
-              // {/* minLength={4} */}
-              // {/* debounceTimeout={500} */}
-              handleFormSubmit={handleFormSubmit}
-              handleInputChange={handleInputChange}
-              results={search} />
-            {/* /> */}
-          {/* </SearchForm> */}
+            handleFormSubmit={handleFormSubmit}
+            handleInputChange={UseDebounce(handleInputChange, 1000)}
+            results={search}
+          />
           <SearchResults />
         </Container>
       </div>
