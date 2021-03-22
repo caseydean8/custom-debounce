@@ -5,6 +5,7 @@ import SearchResults from "../../components/SearchResults";
 import Alert from "../../components/Alert";
 import ArticleContext from "../../utils/ArticleContext";
 import API from "../../utils/API";
+// previous word in Vim is b
 // import { useDebounce } from 'use-debounce';
 
 import UseDebounce from "../../utils/Debounce";
@@ -21,6 +22,7 @@ function Search() {
 
   const [search, setSearch] = useState("Wikipedia");
   const [error, setError] = useState("");
+  const debounceSearch = UseDebounce(search, 1000);
 
   // When the component mounts, update the title to be Wikipedia Searcher
   useEffect(() => {
@@ -28,11 +30,11 @@ function Search() {
     //  * Update the `Search` page so that the useEffect Hook is listening for the value returned from the `useDebounce` Hook. Pass in a `delay` value of 500.
 
     //* The finished application should only search for a new article if there has been a period of 500 milliseconds without any user input.
-    if (!search) {
+    if (!debounceSearch) {
       return;
     }
 
-    API.searchTerms(search)
+    API.searchTerms(debounceSearch)
       .then((res) => {
         if (res.data.length === 0) {
           throw new Error("No results found.");
@@ -47,7 +49,7 @@ function Search() {
         });
       })
       .catch((err) => setError(err));
-  }, [search]);
+  }, [debounceSearch]);
 
   const handleInputChange = (event) => {
     setSearch(event.target.value);
@@ -70,7 +72,8 @@ function Search() {
           </Alert>
           <SearchForm
             handleFormSubmit={handleFormSubmit}
-            handleInputChange={UseDebounce(handleInputChange, 1000)}
+            // handleInputChange={UseDebounce(handleInputChange, 1000)}
+            handleInputChange={handleInputChange}
             results={search}
           />
           <SearchResults />

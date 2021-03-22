@@ -21,7 +21,7 @@ function SearchForm(props) {
           placeholder="Type in a search term to begin"
           id="term"
         />
-      </div>
+    </div>
     </form>
   );
 }

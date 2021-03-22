@@ -1,15 +1,18 @@
+import { useState, useEffect } from "react";
 
-const UseDebounce = (fn, delay) => {
-  let timer = null;
-  return function () {
-    const context = this,
-      // beware, arrow functions can't use "arguments"
-      args = arguments;
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn.apply(context, args);
-    }, delay);
-  };
+const UseDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(
+    () => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+      return () => clearTimeout(handler);
+    },
+    // Call effect only if value or delay changes
+    [value, delay]
+  );
+  return debouncedValue;
 };
 
 export default UseDebounce;
